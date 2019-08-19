@@ -1,0 +1,28 @@
+<%= form_with(model: media_file, local: true, :multipart => true) do |form| %>
+  <% if media_file.errors.any? %>
+    <div id="error_explanation">
+      <h2><%= pluralize(media_file.errors.count, "error") %> prohibited this media_file from being saved:</h2>
+
+      <ul>
+      <% media_file.errors.full_messages.each do |message| %>
+        <li><%= message %></li>
+      <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+
+  <div class="field">
+    <%= form.label :files %>
+    <%= form.file_field :files, multiple: true %>
+  </div>
+
+  <div class="field">
+    <%= form.label :description %>
+    <%= form.text_field :description %>
+  </div>
+
+  <div class="actions">
+    <%= form.submit %>
+  </div>
+<% end %>
