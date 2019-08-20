@@ -1,67 +1,49 @@
-<nav class="navbar navbar-dark fixed-top bg-dark flex-md-nowrap p-0 shadow">
-  <a class="navbar-brand col-sm-3 col-md-2 mr-0" href="#"><%= current_user.email %></a>
-  <ul class="navbar-nav px-3">
-    <li class="nav-item text-nowrap">
-      <a class="nav-link" href="#">Sign out</a>
-    </li>
-  </ul>
-</nav>
+<main role="main" class="col-md-8 ml-sm-auto col-lg-8 px-4">
+  <div>
+  <% if notice %>
+    <p id="notice" class="alert alert-info center" ><%= notice %></p>
+  <% end %>
+  </div>
 
-<div class="container-fluid">
-  <div class="row">
-    <nav class="col-md-2 d-none d-md-block bg-light sidebar">
-      <div class="sidebar-sticky">
-        <ul class="nav flex-column">
-          <li class="nav-item">
-            <a class="nav-link active" href="#">
-              <span class="fa fa-file"></span>
-              My Files
-            </a>
-          </li>
-        </ul>
-      </div>
-    </nav>
+  <div class="table-responsive">
+    <table class="table">
+      <thead>
+        <tr>
+          <th>Name</th>
+          <th>Modified</th>
+          <th>File size</th>
+          <th>Actions</th>
+        </tr>
+      </thead>
+      <tbody>
+        <% if @files.empty?%>
+          <tr>
+            <td colspan='4'>
+              <div class="alert alert-info text-center">No files Available yet</div>
+            </td>
+          </tr>
+        <% end %>
+        <% @files.each do |file| %>
+        <tr>
+          <td><i class="<%= @media_types[file.content_type] || 'fa fa-file' %> text-primary fa-2x">&nbsp</i><%= file.filename.to_s.capitalize! %></td>
+          <td><%= time_ago_in_words(file.created_at) %> ago</td>
+          <td><%= (file.byte_size.to_f / 2**20).round(4) %> MB</td>
+          <td>
+          <%= link_to "<i class='fa fa-download'></i> Download".html_safe, rails_blob_path(file, disposition: "attachment"), class: " btn btn-primary" %>
+          <%= link_to " <i class='fa fa-eye'></i> Preview".html_safe, rails_blob_path(file, disposition: "preview"), target: :blank, class: "btn btn-primary" %>
+          <%= link_to '<i class="fa fa-trash"></i> Delete'.html_safe, media_file_path(file), method: :delete, data: {confirm: "Are you sure?"}, class: 'btn btn-danger'%>
+          </td>
+        </tr>
+      <% end %>
+      </tbody>
+    </table>
+  </div>
+</main>
 
-    <main role="main" class="col-md-8 ml-sm-auto col-lg-8 px-4">
-      <div>
-      <p id="notice" class="alert alert-info center" ><%= notice %></p>
-      </div>
-
-      <div class="table-responsive">
-        <table class="table">
-          <thead>
-            <tr>
-              <th>Name</th>
-              <th>Modified</th>
-              <th>File size</th>
-              <th>Actions</th>
-            </tr>
-          </thead>
-          <tbody>
-          <% @files.each do |file| %>
-            <tr>
-              <td><i class="<%= @media_types[file.content_type] || 'fa fa-file' %> fa-2x">&nbsp</i><%= file.filename.to_s.capitalize! %></td>
-              <td><%= time_ago_in_words(file.created_at) %></td>
-              <td><%= (file.byte_size.to_f / 2**20).round(4) %> MB</td>
-              <td><span data-toggle="popover" data-placement="bottom" title="Popover title" data-content="testing">...</span></td>
-            </tr>
-          <% end %>
-          </tbody>
-        </table>
-      </div>
-    </main>
-
-     <nav class="col-md-2">
-      <div class="sidebar-sticky mx-auto">
-        <%= link_to '<i class="fa fa-upload"></i> Upload File'.html_safe, new_media_file_path, class: 'btn btn-primary float-right'%>
-      </div>
-     </nav>
-
-    
+<nav class="col-md-2">
+  <div class="sidebar-sticky mx-auto">
+    <%= link_to '<i class="fa fa-upload">&nbsp</i> Upload Files'.html_safe, new_media_file_path, class: 'btn btn-primary'%>
+  </div>
+</nav>    
   </div>
 </div>
-<script>
-  $(function () {
-    $('[data-toggle="popover"]').popover()
-  })
-</script>

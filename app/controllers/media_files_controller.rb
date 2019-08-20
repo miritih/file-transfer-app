@@ -1,15 +1,11 @@
 class MediaFilesController < ApplicationController
-  before_action :set_media_file, only: [:show, :edit, :update, :destroy]
   before_action :media_types, only: [:index]
+  before_action :authenticate_user!
+  layout "dashboard"
 
-  # GET /media_files
-  # GET /media_files.json
   def index
     @files=[]
-    
-    binding.pry
-    
-    MediaFile.all.each do |media_file|
+    MediaFile.where(user_id: current_user.id).order(created_at: :desc).each do |media_file|
       if media_file.files.attached?
         media_file.files.each{ |file| @files.push(file) }
       end
@@ -17,28 +13,17 @@ class MediaFilesController < ApplicationController
     @files
   end
 
-  # GET /media_files/1
-  # GET /media_files/1.json
-  def show
-  end
-
   # GET /media_files/new
   def new
     @media_file = MediaFile.new
   end
 
-  def edit
-  end
-
-  # POST /media_files
-  # POST /media_files.json
   def create
     @media_file = MediaFile.new(media_file_params)
-    @media_file.files.attach(params[:media_file][:files])
     respond_to do |format|
       if @media_file.save
         format.html do
-          redirect_to @media_file, notice: 'File[s] was/were successfully Uploaded.'
+          redirect_to root_path, notice: 'Files were successfully Uploaded.'
         end
       else
         format.html { render :new }
@@ -49,30 +34,12 @@ class MediaFilesController < ApplicationController
     end
   end
 
-  def update
-    respond_to do |format|
-      if @media_file.update(media_file_params)
-        format.html do
-          redirect_to @media_file,
-                      notice: 'Media file was successfully updated.'
-        end
-        format.json { render :show, status: :ok, location: @media_file }
-      else
-        format.html { render :edit }
-        format.json do
-          render json: @media_file.errors,
-                 status: :unprocessable_entity
-        end
-      end
-    end
-  end
-
   def destroy
-    @media_file.destroy
+    ActiveStorage::Attachment.find(params[:id]).purge
     respond_to do |format|
       format.html do
         redirect_to media_files_url,
-                    notice: 'Media file was successfully destroyed.'
+                    notice: 'File was successfully Deleted.'
       end
       format.json { head :no_content }
     end
@@ -118,17 +85,14 @@ class MediaFilesController < ApplicationController
       'font/woff' => 'fa fa-file-video-o',
       'font/woff2' => 'fa fa-file-video-o',
       'application/zip' => 'fa fa-file-archive-o',
+      'application/x-php' => 'fa fa-file-code-o',
+      'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' => 'fa fa-file-code-o',
     }
-  end
-
-  # Use callbacks to share common setup or constraints between actions.
-  def set_media_file
-    @media_file = MediaFile.find(params[:id])
   end
 
   # Never trust parameters from the scary internet, only allow the white list through.
   def media_file_params
-    params.require(:media_file).permit(:name).merge({
+    params.require(:media_file).permit(:name, files: []).merge({
       user_id: current_user.id,
     })
   end

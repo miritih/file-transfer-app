@@ -1,5 +1,12 @@
-<h1>New Media File</h1>
-
+<main role="main" class="col-md-8 ml-sm-auto col-lg-8 px-4">
+  <div>
+    <% if notice %>
+      <p id="notice" class="alert alert-info center" ><%= notice %></p>
+    <% end %>
+  </div>
+<h3>Upload new files</h3>
 <%= render 'form', media_file: @media_file %>
+</main>
 
-<%= link_to 'Back', media_files_path %>
+<nav class="col-md-2  col-lg-2"></nav></div>
+</div>

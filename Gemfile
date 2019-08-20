@@ -53,6 +53,7 @@ group :development, :test do
   gem 'rubocop-airbnb'
   gem 'simplecov', require: false
   gem 'faker'
+  gem "factory_bot_rails"
 end
 
 group :development do
