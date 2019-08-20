@@ -3,7 +3,7 @@ require 'rails_helper'
 RSpec.describe User, type: :model do
   it 'is database authenticable' do
     user = User.create(
-       email: 'test@example.com', 
+      email: 'test@example.com',
       password: 'password123',
       password_confirmation: 'password123'
     )

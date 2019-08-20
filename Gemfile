@@ -27,10 +27,14 @@ gem 'jbuilder', '~> 2.5'
 # Use ActiveModel has_secure_password
 # gem 'bcrypt', '~> 3.1.7'
 
+gem 'jquery-rails'
+
 # Use ActiveStorage variant
 # gem 'mini_magick', '~> 4.8'
 
 gem 'devise'
+# use google cloud for file storage
+gem "google-cloud-storage", "~> 1.8", require: false
 
 # Use Capistrano for deployment
 # gem 'capistrano-rails', group: :development
@@ -49,6 +53,7 @@ group :development, :test do
   gem 'rubocop-airbnb'
   gem 'simplecov', require: false
   gem 'faker'
+  gem "factory_bot_rails"
 end
 
 group :development do

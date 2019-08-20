@@ -4,13 +4,13 @@
 
 # File transfer app
 * requirements:
- ruby '2.5.3'
- rails '5.2.3'
+  - ruby '2.5.3'
+  - rails '5.2.3'
 
 * Setting up locally
   - Make sure you have rails and ruby installed. 
   - Clone the app
-  - Run `bundle install` to istall dependencies
+  - Run `bundle install` to install dependencies
   - Run rake `db:create` followed by `db:schema:load` to setup database
   - To run the app run `rails s` command
  
