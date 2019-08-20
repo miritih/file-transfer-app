@@ -9,7 +9,6 @@ RSpec.describe MediaFilesController, type: :routing do
     it "routes to #new" do
       expect(:get => "/media_files/new").to route_to("media_files#new")
     end
-  
 
     it "routes to #create" do
       expect(:post => "/media_files").to route_to("media_files#create")

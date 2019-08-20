@@ -4,10 +4,10 @@ class MediaFilesController < ApplicationController
   layout "dashboard"
 
   def index
-    @files=[]
+    @files = []
     MediaFile.where(user_id: current_user.id).order(created_at: :desc).each do |media_file|
       if media_file.files.attached?
-        media_file.files.each{ |file| @files.push(file) }
+        media_file.files.each { |file| @files.push(file) }
       end
     end
     @files
@@ -44,6 +44,7 @@ class MediaFilesController < ApplicationController
       format.json { head :no_content }
     end
   end
+
   private
 
   def media_types
